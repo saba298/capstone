@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeRoad AI - Smarter Roads. Safer Tomorrow.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="web.css">
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="app.jpeg" alt="SafeRoad AI Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
+    <span style="vertical-align: middle;">SafeRoad AI</span>
+
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#models" class="nav-link">AI Models</a></li>
+                <li><a href="#results" class="nav-link">Results</a></li>
+                <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+                <li><a href="#impact" class="nav-link">Impact</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="#chatbot" class="nav-link">Chatbot</a></li>
+
+            </ul>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="page-section active">
+        <div class="container">
+            <div class="hero">
+                <h1>Smarter Roads. Safer Tomorrow.</h1>
+                <p class="hero-subtitle">Predicting traffic accident severity using AI and real-time data in Dubai</p>
+                <div class="hero-buttons">
+                    <a href="#about" class="btn btn-primary">Learn More</a>
+                    <a href="#dashboard" class="btn btn-secondary">Open Dashboard</a>
+                </div>
+                <div class="dashboard-preview floating">
+                    <div class="dashboard-mockup">
+                        <i class="fas fa-chart-line" style="font-size: 64px; color: var(--primary-yellow);"></i>
+                        <div style="margin-left: 20px;">
+                            <h3>AI-Powered Dashboard</h3>
+                            <p>Real-time accident prediction & traffic analysis</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="page-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">About SafeRoad AI</h2>
+                <p class="section-subtitle">Advanced machine learning technology to predict and prevent traffic accidents in Dubai using weather and traffic data analysis.</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Data Collection</h3>
+                        <p>Gathering comprehensive traffic and weather data from Dubai's smart city infrastructure, including real-time sensors and historical records.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Model Training</h3>
+                        <p>Training multiple machine learning algorithms including XGBoost, Random Forest, and neural networks to achieve optimal prediction accuracy.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Performance Analysis</h3>
+                        <p>Rigorous testing and validation to ensure our models achieve industry-leading accuracy in accident severity prediction.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Dashboard Deployment</h3>
+                        <p>Creating an intuitive, real-time dashboard for traffic authorities and drivers to access predictions and insights.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Models Section -->
+    <section id="models" class="page-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">AI Models</h2>
+                <p class="section-subtitle">We tested multiple state-of-the-art machine learning algorithms to find the best performer for accident prediction.</p>
+            </div>
+            <div class="models-grid">
+                <div class="model-card">
+                    <div class="model-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="model-name">Logistic Regression</h3>
+                    <div class="model-accuracy">78.5%</div>
+                    <p class="model-description">Linear approach providing interpretable results with decent baseline performance for accident prediction.</p>
+                </div>
+                <div class="model-card">
+                    <div class="model-icon">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <h3 class="model-name">Random Forest</h3>
+                    <div class="model-accuracy">82.3%</div>
+                    <p class="model-description">Ensemble method combining multiple decision trees for improved accuracy and feature importance analysis.</p>
+                </div>
+                <div class="model-card">
+                    <div class="model-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="model-name">LightGBM</h3>
+                    <div class="model-accuracy">85.1%</div>
+                    <p class="model-description">Fast gradient boosting framework optimized for efficiency and memory usage with strong performance.</p>
+                </div>
+                <div class="model-card">
+                    <div class="model-icon">
+                        <i class="fas fa-cat"></i>
+                    </div>
+                    <h3 class="model-name">CatBoost</h3>
+                    <div class="model-accuracy">86.7%</div>
+                    <p class="model-description">Gradient boosting algorithm excellent at handling categorical features without extensive preprocessing.</p>
+                </div>
+                <div class="model-card best">
+                    <div class="best-badge">BEST MODEL</div>
+                    <div class="model-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3 class="model-name">XGBoost</h3>
+                    <div class="model-accuracy">88.0%</div>
+                    <p class="model-description">Our champion model achieving 88% accuracy with F1-score of 0.88, providing the most reliable predictions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="page-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Results & Performance</h2>
+                <p class="section-subtitle">Comprehensive analysis of our model performance with detailed metrics and visualizations.</p>
+            </div>
+            <div class="chart-container">
+                <h3 style="margin-bottom: 20px; color: var(--primary-yellow);">Model Performance Comparison</h3>
+                <section id="results">
+  <canvas id="modelChart" width="400" height="200"></canvas>
+</section>
+
+            </div>
+                        <div class="chart-container">
+                <h3 style="margin-bottom: 20px; color: var(--primary-yellow);">Classification Report</h3>
+                <div style="background: var(--dark-tertiary); padding: 20px; border-radius: 10px; font-family: monospace;">
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center;">
+                        <div>
+                            <h4 style="color: var(--accent-blue);">Precision</h4>
+                            <div style="font-size: 24px; color: var(--primary-yellow);">0.87</div>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--accent-blue);">Recall</h4>
+                            <div style="font-size: 24px; color: var(--primary-yellow);">0.89</div>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--accent-blue);">F1-Score</h4>
+                            <div style="font-size: 24px; color: var(--primary-yellow);">0.88</div>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--accent-blue);">Support</h4>
+                            <div style="font-size: 24px; color: var(--primary-yellow);">2,847</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="page-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Live Dashboard</h2>
+                <p class="section-subtitle">Experience our real-time accident prediction dashboard with interactive maps and live data feeds.</p>
+            </div>
+            <div class="dashboard-preview" style="text-align: center;">
+                <div class="dashboard-mockup" style="height: 500px; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: 20px; left: 20px; right: 20px; height: 60px; background: var(--dark-tertiary); border-radius: 10px; display: flex; align-items: center; padding: 0 20px;">
+                        <i class="fas fa-map-marker-alt" style="color: var(--primary-yellow); margin-right: 10px;"></i>
+                        <span>Dubai Traffic Monitoring Dashboard</span>
+                        <div style="margin-left: auto; display: flex; gap: 10px;">
+                            <div style="width: 12px; height: 12px; background: #00FF00; border-radius: 50%;"></div>
+                            <span style="font-size: 14px;">Live</span>
+                        </div>
+                    </div>
+                    <div style="position: absolute; top: 100px; left: 20px; right: 20px; bottom: 20px; background: linear-gradient(45deg, #1A1A1A 25%, transparent 25%), linear-gradient(-45deg, #1A1A1A 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1A1A1A 75%), linear-gradient(-45deg, transparent 75%, #1A1A1A 75%); background-size: 20px 20px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                        <i class="fas fa-external-link-alt" style="font-size: 48px; color: var(--accent-blue); margin-bottom: 20px;"></i>
+                        <h3>Interactive Dashboard</h3>
+                        <p>Click below to access the live dashboard</p>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="margin-top: 30px; font-size: 18px; padding: 20px 40px;" onclick="window.location.href='http://127.0.0.1:8050/'">
+    <i class="fas fa-external-link-alt" style="margin-right: 10px;"></i>
+    Open Live Dashboard
+</button>
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section id="impact" class="page-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Real-world Impact</h2>
+                <p class="section-subtitle">How SafeRoad AI is transforming traffic safety for drivers and authorities across Dubai.</p>
+            </div>
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h3>For Drivers</h3>
+                    <p>Real-time alerts and route recommendations to avoid high-risk areas and weather conditions, keeping families safe on the road.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Traffic Authorities</h3>
+                    <p>Predictive insights for resource allocation and proactive traffic management to prevent accidents before they occur.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-cloud-rain"></i>
+                    </div>
+                    <h3>Weather Integration</h3>
+                    <p>Advanced weather pattern analysis to predict how meteorological conditions affect accident probability.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Smart Alerts</h3>
+                    <p>Intelligent notification system that warns drivers and authorities about potential accident hotspots in real-time.</p>
+                </div>
+            </div>
+            <div style="margin-top: 80px; text-align: center; background: var(--dark-secondary); padding: 60px; border-radius: 20px;">
+                <h3 style="font-size: 2rem; margin-bottom: 30px; color: var(--primary-yellow);">Testimonials</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px;">
+                    <div style="background: var(--dark-tertiary); padding: 30px; border-radius: 15px;">
+                        <p style="font-style: italic; margin-bottom: 20px;">"SafeRoad AI has revolutionized how we approach traffic safety in Dubai. The predictive accuracy is remarkable."</p>
+                        <div style="color: var(--primary-yellow); font-weight: 600;">- Traffic Management Authority</div>
+                    </div>
+                    <div style="background: var(--dark-tertiary); padding: 30px; border-radius: 15px;">
+                        <p style="font-style: italic; margin-bottom: 20px;">"As a daily commuter, the real-time alerts have helped me avoid dangerous situations multiple times."</p>
+                        <div style="color: var(--primary-yellow); font-weight: 600;">- Dubai Resident</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="page-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Contact & Feedback</h2>
+                <p class="section-subtitle">Get in touch with our team or share your feedback about SafeRoad AI.</p>
+            </div>
+            <form class="contact-form">
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-input" placeholder="Your full name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" placeholder="your.email@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <input type="text" class="form-input" placeholder="What's this about?" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-textarea" rows="5" placeholder="Tell us more..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">How helpful was SafeRoad AI?</label>
+                    <div class="feedback-scale">
+                        <button type="button" class="emoji-btn" data-rating="1">😞</button>
+                        <button type="button" class="emoji-btn" data-rating="2">😐</button>
+                        <button type="button" class="emoji-btn" data-rating="3">🙂</button>
+                        <button type="button" class="emoji-btn" data-rating="4">😊</button>
+                        <button type="button" class="emoji-btn" data-rating="5">🤩</button>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 20px;">
+                    <i class="fas fa-paper-plane" style="margin-right: 10px;"></i>
+                    Send Message
+                </button>
+            </form>
+        </div>
+    </section>
+<!-- Chatbot Section -->
+<section id="chatbot" class="page-section" style="min-height: 900px;">
+  <!-- Remove fixed height container -->
+<div id="chatbot" style="width: 100%;">
+  <iframe src="http://127.0.0.1:8051/" width="100%" height="1000px" style="border:none; border-radius: 10px;"></iframe>
+</div>
+
+</section>
+
+
+    <script>
+        // Particle Animation
+        class ParticleSystem {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.ctx = canvas.context || canvas.getContext('2d');
+                this.particles = [];
+                this.resize();
+                this.init();
+                
+                window.addEventListener('resize', () => this.resize());
+            }
+            
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            init() {
+                for (let i = 0; i < 50; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        size: Math.random() * 3 + 1,
+                        opacity: Math.random() * 0.5 + 0.2
+                    });
+                }
+            }
+            
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.particles.forEach(particle => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+                    
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    this.ctx.fillStyle = `rgba(255, 215, 0, ${particle.opacity})`;
+                    this.ctx.fill();
+                });
+                
+                // Draw connections
+                this.particles.forEach((particle1, i) => {
+                    this.particles.slice(i + 1).forEach(particle2 => {
+                        const dx = particle1.x - particle2.x;
+                        const dy = particle1.y - particle2.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(particle1.x, particle1.y);
+                            this.ctx.lineTo(particle2.x, particle2.y);
+                            this.ctx.strokeStyle = `rgba(255, 215, 0, ${0.1 * (1 - distance / 100)})`;
+                            this.ctx.lineWidth = 1;
+                            this.ctx.stroke();
+                        }
+                    });
+                });
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Initialize particles
+        const particleCanvas = document.getElementById('particles-canvas');
+        const particleSystem = new ParticleSystem(particleCanvas);
+        particleSystem.animate();
+
+        // Navigation functionality
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.page-section');
+        const navbar = document.getElementById('navbar');
+
+        // Navigation click handler
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                showSection(targetId);
+                
+                // Update active nav link
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+
+        // Show section function
+        function showSection(sectionId) {
+            sections.forEach(section => {
+                section.classList.remove('active');
+                if (section.id === sectionId) {
+                    section.classList.add('active');
+                }
+            });
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for buttons
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                showSection(targetId);
+                
+                // Update nav if it's a nav link
+                navLinks.forEach(l => l.classList.remove('active'));
+                const correspondingNavLink = document.querySelector(`.nav-link[href="#${targetId}"]`);
+                if (correspondingNavLink) {
+                    correspondingNavLink.classList.add('active');
+                }
+            });
+        });
+
+        // Contact form functionality
+        const contactForm = document.querySelector('.contact-form');
+        const emojiButtons = document.querySelectorAll('.emoji-btn');
+        let selectedRating = null;
+
+        // Emoji rating selection
+        emojiButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                emojiButtons.forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedRating = btn.dataset.rating;
+            });
+        });
+
+        // Form submission
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(contactForm);
+            const data = {
+                name: contactForm.querySelector('input[type="text"]').value,
+                email: contactForm.querySelector('input[type="email"]').value,
+                subject: contactForm.querySelectorAll('input[type="text"]')[1].value,
+                message: contactForm.querySelector('textarea').value,
+                rating: selectedRating
+            };
+            
+            // Simulate form submission
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i>Sending...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                submitBtn.innerHTML = '<i class="fas fa-check" style="margin-right: 10px;"></i>Message Sent!';
+                submitBtn.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.style.background = '';
+                    submitBtn.disabled = false;
+                    contactForm.reset();
+                    emojiButtons.forEach(b => b.classList.remove('selected'));
+                    selectedRating = null;
+                }, 2000);
+            }, 1500);
+        });
+
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.model-card, .chart-container, .impact-card, .timeline-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Add hover effects for model cards
+        document.querySelectorAll('.model-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add click animation for buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Create ripple effect
+                const ripple = document.createElement('span');
+                const rect = btn.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.3)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.pointerEvents = 'none';
+                
+                btn.style.position = 'relative';
+                btn.style.overflow = 'hidden';
+                btn.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Mobile menu functionality
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navMenu = document.querySelector('.nav-menu');
+
+        mobileMenu.addEventListener('click', () => {
+            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+            navMenu.style.position = 'absolute';
+            navMenu.style.top = '100%';
+            navMenu.style.left = '0';
+            navMenu.style.right = '0';
+            navMenu.style.background = 'rgba(10, 10, 10, 0.98)';
+            navMenu.style.flexDirection = 'column';
+            navMenu.style.padding = '20px';
+            navMenu.style.borderRadius = '0 0 20px 20px';
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.nav-container')) {
+                if (window.innerWidth <= 768) {
+                    navMenu.style.display = 'none';
+                }
+            }
+        });
+
+        // Add loading animation
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // Performance optimization
+        let ticking = false;
+        function updateParticles() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    // Particle updates happen in the animation loop
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                const currentActive = document.querySelector('.nav-link.active');
+                const allNavLinks = Array.from(navLinks);
+                const currentIndex = allNavLinks.indexOf(currentActive);
+                const nextIndex = (currentIndex + 1) % allNavLinks.length;
+                allNavLinks[nextIndex].click();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                const currentActive = document.querySelector('.nav-link.active');
+                const allNavLinks = Array.from(navLinks);
+                const currentIndex = allNavLinks.indexOf(currentActive);
+                const prevIndex = currentIndex === 0 ? allNavLinks.length - 1 : currentIndex - 1;
+                allNavLinks[prevIndex].click();
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('modelChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Logistic Regression', 'Random Forest', 'LightGBM', 'XGBoost'],
+      datasets: [{
+        label: 'F1-Score',
+        data: [0.82, 0.86, 0.80, 0.88],
+        backgroundColor: ['#f39c12', '#3498db', '#2ecc71', '#e74c3c'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: { y: { beginAtZero: true, max: 1 } }
+    }
+  });
+</script>
+
+</body>
+</html>
