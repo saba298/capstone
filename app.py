@@ -9,10 +9,13 @@ from layout.predict_tab import get_layout as get_predict_layout, register_callba
 from layout.future_forecast import get_layout as get_forecast_layout, register_callbacks as register_forecast_callbacks
 from layout.risk_forecast import get_layout as get_risk_layout, register_callbacks as register_risk_callbacks
 
-# Use a Bootswatch theme (e.g., LUX)
-external_stylesheets = [dbc.themes.LUX]
+# Use a Bootswatch theme and Inter font
+external_stylesheets = [
+    dbc.themes.LUX,
+    "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+]
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
 app.title = "Traffic Accident Dashboard"
 
 # Layout with vertical tab navigation
@@ -23,22 +26,22 @@ app.layout = html.Div([
             # Left sidebar with title and vertical tabs
             dbc.Col([
                 # Dashboard title at top left
-                html.H3("Safe Road AI", className="mb-4", 
-                       style={'color': 'white', 'font-weight': 'bold', 'text-align': 'left', 'font-size': '1.8rem', 'padding': '20px 20px 0 20px'}),
+                html.H3("SafeRoad AI", className="mb-4", 
+                       style={'color': 'white', 'font-weight': '700', 'text-align': 'left', 'font-size': '1.8rem', 'padding': '20px 20px 0 20px', 'font-family': 'Inter, sans-serif'}),
                 
                 # Center container for tabs only
                 html.Div([
-                    # Vertical tabs with improved styling
+                    # Vertical tabs with improved styling and spacing
                     dbc.Nav([
-                        dbc.NavItem(dbc.NavLink("Overview", href="#", id="tab-1-link", active=True, className="mb-3 sidebar-tab", 
-                                              style={'color': 'white', 'border': 'none', 'border-radius': '12px', 'text-align': 'center', 'font-weight': '500'})),
-                        dbc.NavItem(dbc.NavLink("Predict", href="#", id="tab-2-link", className="mb-3 sidebar-tab",
-                                              style={'color': 'white', 'border': 'none', 'border-radius': '12px', 'text-align': 'center', 'font-weight': '500'})),
-                        dbc.NavItem(dbc.NavLink("Forecast", href="#", id="tab-3-link", className="mb-3 sidebar-tab",
-                                              style={'color': 'white', 'border': 'none', 'border-radius': '12px', 'text-align': 'center', 'font-weight': '500'})),
-                        dbc.NavItem(dbc.NavLink("Risk Analysis", href="#", id="tab-4-link", className="mb-3 sidebar-tab",
-                                              style={'color': 'white', 'border': 'none', 'border-radius': '12px', 'text-align': 'center', 'font-weight': '500'})),
-                    ], vertical=True, pills=True, id="nav-tabs"),
+                        dbc.NavItem(dbc.NavLink("Overview", href="#", id="tab-1-link", active=True, className="mb-5 sidebar-tab", 
+                                              style={'color': 'white', 'border': 'none', 'border-radius': '12px', 'text-align': 'center', 'font-weight': '500', 'font-family': 'Inter, sans-serif', 'margin-bottom': '2rem !important'})),
+                        dbc.NavItem(dbc.NavLink("Predict", href="#", id="tab-2-link", className="mb-5 sidebar-tab",
+                                              style={'color': 'white', 'border': 'none', 'border-radius': '12px', 'text-align': 'center', 'font-weight': '500', 'font-family': 'Inter, sans-serif', 'margin-bottom': '2rem !important'})),
+                        dbc.NavItem(dbc.NavLink("Forecast", href="#", id="tab-3-link", className="mb-5 sidebar-tab",
+                                              style={'color': 'white', 'border': 'none', 'border-radius': '12px', 'text-align': 'center', 'font-weight': '500', 'font-family': 'Inter, sans-serif', 'margin-bottom': '2rem !important'})),
+                        dbc.NavItem(dbc.NavLink("Risk Analysis", href="#", id="tab-4-link", className="mb-5 sidebar-tab",
+                                              style={'color': 'white', 'border': 'none', 'border-radius': '12px', 'text-align': 'center', 'font-weight': '500', 'font-family': 'Inter, sans-serif'})),
+                    ], vertical=True, pills=True, id="nav-tabs", style={'gap': '1.5rem'}),
                 ], style={'display': 'flex', 'flex-direction': 'column', 'justify-content': 'center', 'height': 'calc(100vh - 100px)', 'padding': '0 20px'}),
                 
                 # Hidden store to track active tab
