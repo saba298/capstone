@@ -1,5 +1,4 @@
 # layout/risk_forecast.py
-
 import os
 import dash
 from dash import html, dcc, Input, Output, State, callback_context
@@ -20,7 +19,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.join(current_dir, '..', '..', 'notebooks', 'xgb_model.json')
 model = Booster()
 model.load_model(model_path)
-print(f"✅ Risk Analysis: Model loaded from: {model_path}")
+print(f" Risk Analysis: Model loaded from: {model_path}")
 
 # === Load encoders ===
 # From dashboard/layout/ to notebooks/
@@ -30,7 +29,7 @@ le_condition = joblib.load(os.path.join(encoder_dir, 'label_encoder_condition.pk
 le_day_of_week = joblib.load(os.path.join(encoder_dir, 'label_encoder_day_of_week.pkl'))
 le_season = joblib.load(os.path.join(encoder_dir, 'label_encoder_season.pkl'))
 le_part_of_day = joblib.load(os.path.join(encoder_dir, 'label_encoder_part_of_day.pkl'))
-print(f"✅ Risk Analysis: Encoders loaded from: {encoder_dir}")
+print(f" Risk Analysis: Encoders loaded from: {encoder_dir}")
 
 # === Load training data for statistical averages ===
 try:
@@ -42,15 +41,15 @@ try:
     columns_with_nulls = ["temp_c", "humidity", "wind_kph", "precip_mm", "cloud", "pressure_mb", "condition"]
     TRAINING_DATA = TRAINING_DATA.dropna(subset=columns_with_nulls)
     
-    print("✅ Risk Analysis: Loaded training data for risk forecasting")
-    print(f"📊 Training data shape: {TRAINING_DATA.shape}")
-    print(f"📁 Data loaded from: {training_data_path}")
+    print(" Risk Analysis: Loaded training data for risk forecasting")
+    print(f" Training data shape: {TRAINING_DATA.shape}")
+    print(f" Data loaded from: {training_data_path}")
     
 except Exception as e:
-    print(f"❌ Risk Analysis: Could not load training data: {e}")
-    print(f"🔍 Tried to load from: {training_data_path}")
-    print(f"🔍 Current directory: {current_dir}")
-    print(f"🔍 Check if file exists: {os.path.exists(training_data_path) if 'training_data_path' in locals() else 'Path not defined'}")
+    print(f" Risk Analysis: Could not load training data: {e}")
+    print(f" Tried to load from: {training_data_path}")
+    print(f" Current directory: {current_dir}")
+    print(f" Check if file exists: {os.path.exists(training_data_path) if 'training_data_path' in locals() else 'Path not defined'}")
     TRAINING_DATA = None
 
 # === Feature definitions - CORRECTED ORDER TO MATCH MODEL ===
@@ -107,7 +106,7 @@ def get_statistical_averages_for_period(target_date, location=None):
     day_of_week = target_date.strftime('%A')
     month = target_date.month
     
-    print(f"🗓️ Calculating averages for: {target_date} (Season: {season}, Day: {day_of_week})")
+    print(f"Calculating averages for: {target_date} (Season: {season}, Day: {day_of_week})")
     
     # Filter data by season and month for more accurate historical averages
     seasonal_data = TRAINING_DATA[TRAINING_DATA['season'] == season].copy()
@@ -120,10 +119,10 @@ def get_statistical_averages_for_period(target_date, location=None):
     # Use monthly data if available, otherwise seasonal
     if len(monthly_data) >= 50:  # Minimum threshold for monthly averages
         reference_data = monthly_data
-        print(f"📊 Using monthly averages ({len(reference_data)} samples)")
+        print(f"Using monthly averages ({len(reference_data)} samples)")
     else:
         reference_data = seasonal_data
-        print(f"📊 Using seasonal averages ({len(reference_data)} samples)")
+        print(f"Using seasonal averages ({len(reference_data)} samples)")
     
     # Calculate statistical averages
     averages = {}
@@ -145,7 +144,7 @@ def get_statistical_averages_for_period(target_date, location=None):
             # Weather features
             averages[feature] = reference_data[feature].median()
     
-    # Categorical features - use mode (most common)
+    # Categorical features - using mode
     averages['day_of_week'] = day_of_week
     averages['season'] = season
     
@@ -157,14 +156,14 @@ def get_statistical_averages_for_period(target_date, location=None):
     part_of_day_mode = reference_data['part_of_day'].mode()
     averages['part_of_day'] = part_of_day_mode.iloc[0] if len(part_of_day_mode) > 0 else 'Afternoon'
     
-    print(f"✅ Generated statistical averages: {averages}")
+    print(f"Generated statistical averages: {averages}")
     return averages
 
 def prepare_model_input_for_forecast(features_dict):
     """
     Prepare input for XGBoost model with proper encoding and CORRECT FEATURE ORDER
     """
-    # Create DataFrame with EXACT feature order that model expects
+    # Create DataFrame with exact feature order that model expects
     input_df = pd.DataFrame([features_dict])
     
     # Encode categorical features
@@ -174,22 +173,22 @@ def prepare_model_input_for_forecast(features_dict):
         input_df['season'] = le_season.transform([features_dict['season']])[0]
         input_df['part_of_day'] = le_part_of_day.transform([features_dict['part_of_day']])[0]
     except ValueError as e:
-        print(f"❌ Encoding error: {e}")
+        print(f"Encoding error: {e}")
         raise
     
     # Ensure correct data types
     for feature in NUMERICAL_FEATURES:
         input_df[feature] = pd.to_numeric(input_df[feature], errors='coerce')
     
-    # CRITICAL: Reorder columns to match model's expected feature order
+    # Reorder columns to match model's expected feature order
     expected_order = ['acci_x', 'acci_y', 'acci_hour', 'temp_c', 'humidity', 'wind_kph', 
                       'precip_mm', 'cloud', 'pressure_mb', 'condition', 'day_of_week', 'season', 'part_of_day']
     
     input_df = input_df[expected_order]
     
-    print(f"🔧 Model input shape: {input_df.shape}")
-    print(f"🔧 Model input columns: {list(input_df.columns)}")
-    print(f"🔧 Model input dtypes: {input_df.dtypes.to_dict()}")
+    print(f"Model input shape: {input_df.shape}")
+    print(f"Model input columns: {list(input_df.columns)}")
+    print(f"Model input dtypes: {input_df.dtypes.to_dict()}")
     
     return input_df
 
@@ -227,7 +226,7 @@ def get_layout():
         
         # How to Use Section - Full Width Rectangle
         dbc.Card([
-            dbc.CardHeader(html.H5("📋 How to Use", className="mb-0")),
+            dbc.CardHeader(html.H5("How to Use", className="mb-0")),
             dbc.CardBody([
                 html.P([
                     "This strategic risk forecasting tool helps you plan for future periods by analyzing historical patterns. ",
@@ -236,7 +235,7 @@ def get_layout():
                     html.Strong("'How risky will next December be?'"), " or ", html.Strong("'Should we increase patrols during summer weekends?'")
                 ], className="mb-2"),
                 html.P([
-                    html.Strong("🎯 Key Features: "), 
+                    html.Strong("Key Features: "), 
                     "Long-term planning • Historical pattern analysis • Weather-based predictions • Location-specific insights"
                 ], className="mb-0", style={'color': '#0066cc'})
             ])
@@ -245,7 +244,7 @@ def get_layout():
         # Input Controls Row - All 4 items side by side
         dbc.Row([
             dbc.Col([
-                dbc.Label("📅 Future Date", className="fw-bold mb-2"),
+                dbc.Label("Future Date", className="fw-bold mb-2"),
                 dcc.DatePickerSingle(
                     id='risk-date-picker',
                     min_date_allowed=datetime.date.today(),
@@ -257,7 +256,7 @@ def get_layout():
             ], md=3),
             
             dbc.Col([
-                dbc.Label("🌍 Latitude", className="fw-bold mb-2"),
+                dbc.Label("Latitude", className="fw-bold mb-2"),
                 dbc.Input(
                     id="forecast-lat", 
                     type="number", 
@@ -270,7 +269,7 @@ def get_layout():
             ], md=3),
             
             dbc.Col([
-                dbc.Label("🌍 Longitude", className="fw-bold mb-2"),
+                dbc.Label("Longitude", className="fw-bold mb-2"),
                 dbc.Input(
                     id="forecast-lon", 
                     type="number", 
@@ -283,9 +282,9 @@ def get_layout():
             ], md=3),
             
             dbc.Col([
-                dbc.Label("⚡ Action", className="fw-bold mb-2"),
+                dbc.Label("Action", className="fw-bold mb-2"),
                 dbc.Button(
-                    "🔮 Generate Strategic Forecast", 
+                    "Generate Strategic Forecast", 
                     id='run-risk-btn', 
                     color="primary", 
                     size="lg",
@@ -319,11 +318,11 @@ def get_layout():
             ], md=6)
         ], className="mb-4"),
         
-        # Results and Features (Full Width)
+        # Results and Features
         html.Div(id='risk-prediction-output', className="mb-4"),
         html.Div(id='forecast-features', className="mb-4")
         
-    ], fluid=True)
+    ], fluid=True, className="risk-forecast-container")
 
 def register_callbacks(app):
     @app.callback(
@@ -351,20 +350,20 @@ def register_callbacks(app):
             today = datetime.date.today()
             days_ahead = (target_date - today).days
             
-            print(f"🎯 Forecasting for: {target_date} ({days_ahead} days ahead)")
+            print(f"Forecasting for: {target_date} ({days_ahead} days ahead)")
             
             # Prepare location if provided
             location = None
             if lat is not None and lon is not None:
                 location = {'lat': lat, 'lon': lon}
-                location_info = f"📍 Location: {lat:.4f}, {lon:.4f}"
+                location_info = f"Location: {lat:.4f}, {lon:.4f}"
             else:
-                location_info = "🌍 Regional average (no specific location)"
+                location_info = "Regional average (no specific location)"
             
             # Status information
             status = dbc.Alert([
-                html.P(f"📅 Target Date: {target_date.strftime('%A, %B %d, %Y')} | ⏰ {days_ahead:,} days ahead | {location_info}"),
-                html.P("📊 Analysis complete - using historical statistical averages for prediction", className="mb-0")
+                html.P(f"Target Date: {target_date.strftime('%A, %B %d, %Y')} | {days_ahead:,} days ahead | {location_info}"),
+                html.P("Analysis complete - using historical statistical averages for prediction", className="mb-0")
             ], color="success")
             
             # Get statistical averages for the target period
@@ -380,14 +379,14 @@ def register_callbacks(app):
             predicted_label = severity_classes[predicted_class]
             confidence = pred_probs[predicted_class]
             
-            print(f"✅ Strategic forecast: {predicted_label} (confidence: {confidence:.3f})")
+            print(f"Strategic forecast: {predicted_label} (confidence: {confidence:.3f})")
             
             # Get historical severity distribution for comparison
             historical_dist = get_historical_severity_distribution(target_date)
             
             # Create prediction results display
             results = dbc.Card([
-                dbc.CardHeader(html.H4("🎯 Strategic Risk Forecast Results")),
+                dbc.CardHeader(html.H4("Strategic Risk Forecast Results")),
                 dbc.CardBody([
                     dbc.Row([
                         dbc.Col([
@@ -397,7 +396,7 @@ def register_callbacks(app):
                                   style={'text-align': 'center', 'font-size': '1.2em', 'margin-bottom': '20px'})
                         ], md=6),
                         dbc.Col([
-                            html.P("📊 Risk Probability Distribution:", style={'font-weight': 'bold', 'margin-bottom': '10px'}),
+                            html.P("Risk Probability Distribution:", style={'font-weight': 'bold', 'margin-bottom': '10px'}),
                             html.Ul([
                                 html.Li(f"{cls.capitalize()}: {prob:.1%}")
                                 for cls, prob in zip(severity_classes, pred_probs)
@@ -452,14 +451,14 @@ def register_callbacks(app):
                 risk_color = "success"
             
             summary = dbc.Card([
-                dbc.CardHeader(html.H5("📋 Strategic Planning Summary")),
+                dbc.CardHeader(html.H5("Strategic Planning Summary")),
                 dbc.CardBody([
                     html.H4(risk_level, style={'text-align': 'center', 'margin-bottom': '15px'}),
                     html.Hr(),
-                    html.P(f"🌍 Season: {season} | 📅 Day Type: {day_name}"),
-                    html.P(f"🌡️ Expected Weather: {statistical_features['condition']} | 🕐 Peak Risk Time: {statistical_features['part_of_day']}"),
+                    html.P(f"Season: {season} | Day Type: {day_name}"),
+                    html.P(f"Expected Weather: {statistical_features['condition']} | Peak Risk Time: {statistical_features['part_of_day']}"),
                     html.Hr(),
-                    html.P("💡 Strategic Recommendations:", style={'font-weight': 'bold'}),
+                    html.P("Strategic Recommendations:", style={'font-weight': 'bold'}),
                     html.Ul([
                         html.Li("Increase patrol presence during peak risk hours") if severe_risk > 0.15 else html.Li("Standard patrol schedule recommended"),
                         html.Li("Weather-specific safety campaigns") if statistical_features['condition'] != 'Clear' else html.Li("General safety awareness sufficient"),
@@ -476,11 +475,11 @@ def register_callbacks(app):
                 ])
                 
                 context = dbc.Card([
-                    dbc.CardHeader(html.H5("📚 Historical Context")),
+                    dbc.CardHeader(html.H5("Historical Context")),
                     dbc.CardBody([
-                        html.P(f"📊 Analysis based on {sample_size:,} historical accidents"),
-                        html.P(f"🗓️ Period: {season} {day_name}s"),
-                        html.P("📈 Historical Severity Distribution:", style={'font-weight': 'bold'}),
+                        html.P(f"Analysis based on {sample_size:,} historical accidents"),
+                        html.P(f"Period: {season} {day_name}s"),
+                        html.P("Historical Severity Distribution:", style={'font-weight': 'bold'}),
                         html.Ul([
                             html.Li(f"{severity.capitalize()}: {prob:.1%}")
                             for severity, prob in historical_dist.items()
@@ -488,15 +487,15 @@ def register_callbacks(app):
                     ])
                 ], color="secondary", outline=True)
             else:
-                context = dbc.Alert("⚠️ Limited historical data available. Predictions based on general patterns.", color="warning")
+                context = dbc.Alert("Limited historical data available. Predictions based on general patterns.", color="warning")
             
-            # CREATE DETAILED FEATURES DISPLAY
+            # Create detailed features display
             features_display = dbc.Card([
-                dbc.CardHeader(html.H5("🔧 Model Input Features")),
+                dbc.CardHeader(html.H5("Model Input Features")),
                 dbc.CardBody([
                     dbc.Row([
                         dbc.Col([
-                            html.P("📊 Numerical Features:", style={'font-weight': 'bold'}),
+                            html.P("Numerical Features:", style={'font-weight': 'bold'}),
                             html.Ul([
                                 html.Li(f"Location: ({statistical_features['acci_x']:.4f}, {statistical_features['acci_y']:.4f})"),
                                 html.Li(f"Hour: {statistical_features['acci_hour']}:00"),
@@ -509,7 +508,7 @@ def register_callbacks(app):
                             ])
                         ], md=6),
                         dbc.Col([
-                            html.P("📋 Categorical Features:", style={'font-weight': 'bold'}),
+                            html.P("Categorical Features:", style={'font-weight': 'bold'}),
                             html.Ul([
                                 html.Li(f"Weather Condition: {statistical_features['condition']}"),
                                 html.Li(f"Day of Week: {statistical_features['day_of_week']}"),
@@ -524,11 +523,11 @@ def register_callbacks(app):
             return status, results, prob_fig, comparison_fig, summary, context, features_display
             
         except Exception as e:
-            print(f"❌ Risk forecast error: {e}")
+            print(f"Risk forecast error: {e}")
             import traceback
             traceback.print_exc()
             
-            error_fig = px.bar(title=f"❌ Error: {str(e)}")
+            error_fig = px.bar(title=f"Error: {str(e)}")
             error_fig.update_layout(height=500)
             error_msg = dbc.Alert(f"Error during risk forecasting: {str(e)}", color="danger")
             
