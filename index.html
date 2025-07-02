@@ -26,8 +26,9 @@
                 <li><a href="#results" class="nav-link">Results</a></li>
                 <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
                 <li><a href="#impact" class="nav-link">Impact</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
                 <li><a href="#chatbot" class="nav-link">Chatbot</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                
 
             </ul>
             <div class="mobile-menu">
@@ -64,7 +65,7 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">About SafeRoad AI</h2>
-                <p class="section-subtitle">Advanced machine learning technology to predict and prevent traffic accidents in Dubai using weather and traffic data analysis.</p>
+                <p class="section-subtitle">Advanced machine learning technology to analyze and predict traffic accident severity in Dubai using weather and traffic data analysis.</p>
             </div>
             <div class="timeline">
                 <div class="timeline-item">
@@ -73,7 +74,7 @@
                     </div>
                     <div class="timeline-content">
                         <h3>Data Collection</h3>
-                        <p>Gathering comprehensive traffic and weather data from Dubai's smart city infrastructure, including real-time sensors and historical records.</p>
+                        <p>Gathering comprehensive traffic and weather data from Dubai's official traffic accident reports and real-time weather APIs.</p>
                     </div>
                 </div>
                 <div class="timeline-item">
@@ -82,7 +83,7 @@
                     </div>
                     <div class="timeline-content">
                         <h3>Model Training</h3>
-                        <p>Training multiple machine learning algorithms including XGBoost, Random Forest, and neural networks to achieve optimal prediction accuracy.</p>
+                        <p>Training multiple machine learning algorithms including XGBoost, LightGBM,logistic regression and Random Forest to achieve optimal prediction accuracy.</p>
                     </div>
                 </div>
                 <div class="timeline-item">
@@ -120,7 +121,7 @@
                         <i class="fas fa-brain"></i>
                     </div>
                     <h3 class="model-name">Logistic Regression</h3>
-                    <div class="model-accuracy">78.5%</div>
+                    <div class="model-accuracy">50%</div>
                     <p class="model-description">Linear approach providing interpretable results with decent baseline performance for accident prediction.</p>
                 </div>
                 <div class="model-card">
@@ -128,7 +129,7 @@
                         <i class="fas fa-tree"></i>
                     </div>
                     <h3 class="model-name">Random Forest</h3>
-                    <div class="model-accuracy">82.3%</div>
+                    <div class="model-accuracy">86%</div>
                     <p class="model-description">Ensemble method combining multiple decision trees for improved accuracy and feature importance analysis.</p>
                 </div>
                 <div class="model-card">
@@ -136,16 +137,8 @@
                         <i class="fas fa-bolt"></i>
                     </div>
                     <h3 class="model-name">LightGBM</h3>
-                    <div class="model-accuracy">85.1%</div>
+                    <div class="model-accuracy">80%</div>
                     <p class="model-description">Fast gradient boosting framework optimized for efficiency and memory usage with strong performance.</p>
-                </div>
-                <div class="model-card">
-                    <div class="model-icon">
-                        <i class="fas fa-cat"></i>
-                    </div>
-                    <h3 class="model-name">CatBoost</h3>
-                    <div class="model-accuracy">86.7%</div>
-                    <p class="model-description">Gradient boosting algorithm excellent at handling categorical features without extensive preprocessing.</p>
                 </div>
                 <div class="model-card best">
                     <div class="best-badge">BEST MODEL</div>
@@ -180,11 +173,11 @@
                     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center;">
                         <div>
                             <h4 style="color: var(--accent-blue);">Precision</h4>
-                            <div style="font-size: 24px; color: var(--primary-yellow);">0.87</div>
+                            <div style="font-size: 24px; color: var(--primary-yellow);">0.92</div>
                         </div>
                         <div>
                             <h4 style="color: var(--accent-blue);">Recall</h4>
-                            <div style="font-size: 24px; color: var(--primary-yellow);">0.89</div>
+                            <div style="font-size: 24px; color: var(--primary-yellow);">0.84</div>
                         </div>
                         <div>
                             <h4 style="color: var(--accent-blue);">F1-Score</h4>
@@ -192,7 +185,7 @@
                         </div>
                         <div>
                             <h4 style="color: var(--accent-blue);">Support</h4>
-                            <div style="font-size: 24px; color: var(--primary-yellow);">2,847</div>
+                            <div style="font-size: 24px; color: var(--primary-yellow);">34755</div>
                         </div>
                     </div>
                 </div>
@@ -205,7 +198,7 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Live Dashboard</h2>
-                <p class="section-subtitle">Experience our real-time accident prediction dashboard with interactive maps and live data feeds.</p>
+                <p class="section-subtitle">Explore our interactive accident prediction dashboard with mapped predictions and visual insights.</p>
             </div>
             <div class="dashboard-preview" style="text-align: center;">
                 <div class="dashboard-mockup" style="height: 500px; position: relative; overflow: hidden;">
@@ -234,57 +227,46 @@
     </section>
 
     <!-- Impact Section -->
-    <section id="impact" class="page-section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Real-world Impact</h2>
-                <p class="section-subtitle">How SafeRoad AI is transforming traffic safety for drivers and authorities across Dubai.</p>
-            </div>
-            <div class="impact-grid">
-                <div class="impact-card">
-                    <div class="impact-icon">
-                        <i class="fas fa-car"></i>
-                    </div>
-                    <h3>For Drivers</h3>
-                    <p>Real-time alerts and route recommendations to avoid high-risk areas and weather conditions, keeping families safe on the road.</p>
-                </div>
-                <div class="impact-card">
-                    <div class="impact-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Traffic Authorities</h3>
-                    <p>Predictive insights for resource allocation and proactive traffic management to prevent accidents before they occur.</p>
-                </div>
-                <div class="impact-card">
-                    <div class="impact-icon">
-                        <i class="fas fa-cloud-rain"></i>
-                    </div>
-                    <h3>Weather Integration</h3>
-                    <p>Advanced weather pattern analysis to predict how meteorological conditions affect accident probability.</p>
-                </div>
-                <div class="impact-card">
-                    <div class="impact-icon">
-                        <i class="fas fa-bell"></i>
-                    </div>
-                    <h3>Smart Alerts</h3>
-                    <p>Intelligent notification system that warns drivers and authorities about potential accident hotspots in real-time.</p>
-                </div>
-            </div>
-            <div style="margin-top: 80px; text-align: center; background: var(--dark-secondary); padding: 60px; border-radius: 20px;">
-                <h3 style="font-size: 2rem; margin-bottom: 30px; color: var(--primary-yellow);">Testimonials</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px;">
-                    <div style="background: var(--dark-tertiary); padding: 30px; border-radius: 15px;">
-                        <p style="font-style: italic; margin-bottom: 20px;">"SafeRoad AI has revolutionized how we approach traffic safety in Dubai. The predictive accuracy is remarkable."</p>
-                        <div style="color: var(--primary-yellow); font-weight: 600;">- Traffic Management Authority</div>
-                    </div>
-                    <div style="background: var(--dark-tertiary); padding: 30px; border-radius: 15px;">
-                        <p style="font-style: italic; margin-bottom: 20px;">"As a daily commuter, the real-time alerts have helped me avoid dangerous situations multiple times."</p>
-                        <div style="color: var(--primary-yellow); font-weight: 600;">- Dubai Resident</div>
-                    </div>
-                </div>
-            </div>
+    <!-- Beneficiaries Section -->
+<section id="impact" class="page-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Who Benefits from SafeRoad AI?</h2>
+      <p class="section-subtitle">SafeRoad AI supports multiple stakeholders across Dubai’s smart mobility ecosystem.</p>
+    </div>
+    <div class="impact-grid">
+      <div class="impact-card">
+        <div class="impact-icon">
+          <i class="fas fa-car"></i>
         </div>
-    </section>
+        <h3>Drivers</h3>
+        <p>Get informed about high-risk zones and hazardous weather conditions to make safer driving decisions.</p>
+      </div>
+      <div class="impact-card">
+        <div class="impact-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3>Traffic Authorities</h3>
+        <p>Leverage predictive insights for smarter resource allocation, emergency planning, and accident prevention strategies.</p>
+      </div>
+      <div class="impact-card">
+        <div class="impact-icon">
+          <i class="fas fa-city"></i>
+        </div>
+        <h3>Urban Planners</h3>
+        <p>Use visual analytics and hotspot detection to design safer roads and improve transportation infrastructure.</p>
+      </div>
+      <div class="impact-card">
+        <div class="impact-icon">
+          <i class="fas fa-cloud-sun-rain"></i>
+        </div>
+        <h3>Weather Analysts</h3>
+        <p>Understand how real-time weather conditions influence accident severity across different city regions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
     <!-- Contact Section -->
     <section id="contact" class="page-section">
@@ -293,22 +275,23 @@
                 <h2 class="section-title">Contact & Feedback</h2>
                 <p class="section-subtitle">Get in touch with our team or share your feedback about SafeRoad AI.</p>
             </div>
-            <form class="contact-form">
+                <form action="https://formspree.io/f/myzjoqln" method="POST">
                 <div class="form-group">
                     <label class="form-label">Name</label>
-                    <input type="text" class="form-input" placeholder="Your full name" required>
+                    <input type="text" class="form-input" name="Your full name" required>
+
                 </div>
                 <div class="form-group">
                     <label class="form-label">Email</label>
-                    <input type="email" class="form-input" placeholder="your.email@example.com" required>
+                    <input type="email" class="form-input" name="your.email@example.com" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Subject</label>
-                    <input type="text" class="form-input" placeholder="What's this about?" required>
+                    <input type="text" class="form-input" name="What's this about?" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Message</label>
-                    <textarea class="form-textarea" rows="5" placeholder="Tell us more..." required></textarea>
+                    <textarea class="form-textarea" rows="5" name="Tell us more..." required></textarea>
                 </div>
                 <div class="form-group">
                     <label class="form-label">How helpful was SafeRoad AI?</label>
@@ -325,6 +308,44 @@
                     Send Message
                 </button>
             </form>
+            <!-- Contact Info -->
+<div class="contact-info">
+  <div class="contact-card">
+    <div class="contact-card-header">
+      <img src="mail.png" alt="Mail" class="contact-card-icon" />
+      <h3 class="contact-card-title">Email</h3>
+    </div>
+    <p class="contact-card-text">contact@saferoad-ai.com</p>
+  </div>
+
+  <div class="contact-card">
+    <div class="contact-card-header">
+      <img src="phone.png" alt="Phone" class="contact-card-icon" />
+      <h3 class="contact-card-title">Phone</h3>
+    </div>
+    <p class="contact-card-text">+971 4 XXX XXXX</p>
+  </div>
+
+  <div class="contact-card">
+    <div class="contact-card-header">
+      <img src="locs.png" alt="Location" class="contact-card-icon" />
+      <h3 class="contact-card-title">Location</h3>
+    </div>
+    <p class="contact-card-text">Dubai, United Arab Emirates</p>
+  </div>
+
+  <div class="project-info-card">
+    <h3 class="project-info-title">Project Information</h3>
+    <p class="project-info-text">
+      SafeRoad AI is a capstone project focused on improving road safety through 
+      machine learning and predictive analytics. This project demonstrates the 
+      application of AI in real-world scenarios to create safer transportation systems.
+    </p>
+  </div>
+</div>
+
+          </div>
+
         </div>
     </section>
 <!-- Chatbot Section -->
@@ -662,7 +683,7 @@
       labels: ['Logistic Regression', 'Random Forest', 'LightGBM', 'XGBoost'],
       datasets: [{
         label: 'F1-Score',
-        data: [0.82, 0.86, 0.80, 0.88],
+        data: [0.50, 0.86, 0.80, 0.88],
         backgroundColor: ['#f39c12', '#3498db', '#2ecc71', '#e74c3c'],
         borderWidth: 1
       }]
@@ -672,6 +693,21 @@
     }
   });
 </script>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-center">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="app.jpeg" alt="Logo" class="footer-logo-icon" />
+        </div>
+        <p class="footer-brand-text">SafeRoad AI</p>
+      </div>
+      <p class="footer-copyright">
+        © 2025 SafeRoad AI. Capstone Project - Making roads safer through AI.
+      </p>
+    </div>
+  </div>
+</footer>
 
 </body>
 </html>
