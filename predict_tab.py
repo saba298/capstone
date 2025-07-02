@@ -17,7 +17,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.join(current_dir, '..', '..', 'notebooks', 'xgb_model.json')
 model = Booster()
 model.load_model(model_path)
-print(f"✅ Model loaded from: {model_path}")
+print(f" Model loaded from: {model_path}")
 
 # === Load encoders ===
 # From dashboard/layout/ to notebooks/
@@ -26,7 +26,7 @@ le_condition = joblib.load(os.path.join(encoder_dir, 'label_encoder_condition.pk
 le_day_of_week = joblib.load(os.path.join(encoder_dir, 'label_encoder_day_of_week.pkl'))
 le_season = joblib.load(os.path.join(encoder_dir, 'label_encoder_season.pkl'))
 le_part_of_day = joblib.load(os.path.join(encoder_dir, 'label_encoder_part_of_day.pkl'))
-print(f"✅ Encoders loaded from: {encoder_dir}")
+print(f" Encoders loaded from: {encoder_dir}")
 
 # === Load training data for context-aware defaults ===
 try:
@@ -38,15 +38,15 @@ try:
     columns_with_nulls = ["temp_c", "humidity", "wind_kph", "precip_mm", "cloud", "pressure_mb", "condition"]
     TRAINING_DATA = TRAINING_DATA.dropna(subset=columns_with_nulls)
     
-    print("✅ Loaded training data for context-aware defaults")
-    print(f"📊 Training data shape: {TRAINING_DATA.shape}")
-    print(f"📁 Data loaded from: {training_data_path}")
+    print(" Loaded training data for context-aware defaults")
+    print(f" Training data shape: {TRAINING_DATA.shape}")
+    print(f" Data loaded from: {training_data_path}")
     
 except Exception as e:
-    print(f"❌ Could not load training data: {e}")
-    print(f"🔍 Tried to load from: {training_data_path}")
-    print(f"🔍 Current directory: {current_dir}")
-    print(f"🔍 Check if file exists: {os.path.exists(training_data_path) if 'training_data_path' in locals() else 'Path not defined'}")
+    print(f" Could not load training data: {e}")
+    print(f" Tried to load from: {training_data_path}")
+    print(f" Current directory: {current_dir}")
+    print(f" Check if file exists: {os.path.exists(training_data_path) if 'training_data_path' in locals() else 'Path not defined'}")
     TRAINING_DATA = None
 
 # === Feature definitions ===
@@ -81,7 +81,7 @@ def get_context_aware_defaults(user_input, training_data):
         return fallback_defaults, 0, ["No training data available"]
     
     # Progressive filtering strategy: Apply constraints in order of importance
-    # Priority: categorical features first (more reliable), then numerical
+    # Priority: categorical features first, then numerical
     constraint_priority = [
         ('condition', 'categorical'),
         ('season', 'categorical'), 
@@ -108,7 +108,7 @@ def get_context_aware_defaults(user_input, training_data):
             previous_size = len(current_data)
             
             if constraint_type == 'categorical':
-                # Apply categorical constraint (exact match)
+                # Apply categorical constraint
                 temp_data = current_data[current_data[feature] == user_input[feature]]
                 constraint_desc = f"{feature}={user_input[feature]}"
                 
@@ -127,12 +127,12 @@ def get_context_aware_defaults(user_input, training_data):
             if len(temp_data) >= 1:  # Keep even 1 sample if it matches our constraints!
                 current_data = temp_data
                 applied_constraints.append(constraint_desc)
-                print(f"✅ Applied {constraint_desc}: {previous_size} → {len(current_data)} samples")
+                print(f"Applied {constraint_desc}: {previous_size} → {len(current_data)} samples")
             else:
-                print(f"⚠️ Skipped {constraint_desc}: would result in 0 samples")
+                print(f"Skipped {constraint_desc}: would result in 0 samples")
                 # Don't apply this constraint, keep previous data
     
-    print(f"🎯 Final context: {len(current_data)} samples with constraints: {applied_constraints}")
+    print(f"Final context: {len(current_data)} samples with constraints: {applied_constraints}")
     
     # Generate defaults from the filtered data
     defaults = {}
@@ -149,7 +149,7 @@ def get_context_aware_defaults(user_input, training_data):
                         # Fallback to global mode if no mode in filtered data
                         defaults[feature] = training_data[feature].mode().iloc[0]
                 else:
-                    # Median value in filtered context (robust against outliers)
+                    # Median value in filtered context
                     defaults[feature] = current_data[feature].median()
             else:
                 # Ultimate fallback defaults
@@ -192,7 +192,7 @@ def prepare_model_input(user_input, defaults):
         input_df['season'] = le_season.transform([complete_input['season']])[0]
         input_df['part_of_day'] = le_part_of_day.transform([complete_input['part_of_day']])[0]
     except ValueError as e:
-        print(f"❌ Encoding error: {e}")
+        print(f"Encoding error: {e}")
         raise
     
     # Ensure correct data types
@@ -221,7 +221,7 @@ def get_matching_locations_and_count(user_input, predicted_severity, training_da
     # Start with accidents of the predicted severity
     filtered_data = training_data[training_data['severity'] == predicted_severity].copy()
     
-    # Apply user constraints to find similar accidents (same logic as get_context_aware_defaults)
+    # Apply user constraints to find similar accidents
     constraint_priority = [
         ('condition', 'categorical'),
         ('season', 'categorical'), 
@@ -238,15 +238,15 @@ def get_matching_locations_and_count(user_input, predicted_severity, training_da
         ('acci_y', 'numerical')
     ]
     
-    # Apply constraints progressively (same as context-aware defaults)
+    # Apply constraints progressively
     for feature, constraint_type in constraint_priority:
         if feature in user_input and user_input[feature] is not None:
             if constraint_type == 'categorical':
-                # Apply categorical constraint (exact match)
+                # Apply categorical constraint
                 temp_data = filtered_data[filtered_data[feature] == user_input[feature]]
                 
             else:  # numerical
-                # Apply numerical constraint with tolerance (excluding coordinates for location matching)
+                # Apply numerical constraint with tolerance
                 if feature not in ['acci_x', 'acci_y']:
                     std_val = training_data[feature].std()
                     tolerance = max(std_val * 0.3, training_data[feature].quantile(0.75) - training_data[feature].quantile(0.25)) / 4
@@ -404,7 +404,7 @@ def get_layout():
                 html.Div(id="prediction-results", className="mb-3"),
 
                 dcc.Graph(id='bar-prediction-probabilities',
-                        style={'height': '350px', 'margin': '0', 'padding': '0'},
+                        style={'height': '350px', 'margin': '0', 'padding': '0', 'marginBottom': '24px'},
                         config={'displayModeBar': False}),
                 
                 html.Div(id="context-info", className="mb-3"),
@@ -416,7 +416,7 @@ def get_layout():
             ], width=10),
         ], className="mb-4"),
         
-    ], fluid=True, className="p-4")
+    ], fluid=True, className="p-4 prediction-tab-container")
 
 def register_callbacks(app):
     """
@@ -458,7 +458,7 @@ def register_callbacks(app):
             
             # Check if at least one feature is provided
             if not user_input:
-                error_fig = px.bar(title="❌ Please enter at least one feature")
+                error_fig = px.bar(title="Please enter at least one feature")
                 error_fig.update_layout(
                     height=350,
                     margin=dict(l=0, r=0, t=40, b=0),
@@ -476,7 +476,7 @@ def register_callbacks(app):
                     html.Div()
                 )
             
-            print(f"🔍 User input: {user_input}")
+            print(f"User input: {user_input}")
             
             # Check if user provided coordinates
             user_provided_location = ('acci_x' in user_input and user_input['acci_x'] is not None and 
@@ -488,7 +488,7 @@ def register_callbacks(app):
             # Prepare model input
             model_input_df, complete_input = prepare_model_input(user_input, defaults)
             
-            print(f"📊 Complete input: {complete_input}")
+            print(f"Complete input: {complete_input}")
             
             # Make prediction using XGBoost
             dinput = DMatrix(model_input_df)
@@ -497,7 +497,7 @@ def register_callbacks(app):
             predicted_label = severity_classes[predicted_class]
             confidence = pred_probs[predicted_class]
             
-            print(f"✅ Prediction: {predicted_label} (confidence: {confidence:.3f})")
+            print(f"Prediction: {predicted_label} (confidence: {confidence:.3f})")
             
             # Get accurate count of similar accidents with the predicted severity
             if not user_provided_location:
@@ -508,7 +508,7 @@ def register_callbacks(app):
             # Create results display
             results = dbc.Card([
                 dbc.CardHeader([
-                    html.H5("🎯 Prediction Results", className="mb-0"),
+                    html.H5("Prediction Results", className="mb-0"),
                 ]),
                 dbc.CardBody([
                     dbc.Row([
@@ -518,7 +518,7 @@ def register_callbacks(app):
                             html.P(f"Confidence: {confidence:.1%}", style={'text-align': 'center', 'font-size': '1.1em', 'margin-bottom': '10px'}),
                         ], width=6),
                         dbc.Col([
-                            html.P("📊 Probability Distribution:", style={'font-weight': 'bold', 'margin-bottom': '5px', 'font-size': '0.9em'}),
+                            html.P("Probability Distribution:", style={'font-weight': 'bold', 'margin-bottom': '5px', 'font-size': '0.9em'}),
                             html.Ul([
                                 html.Li(f"{cls.capitalize()}: {prob:.1%}", style={'font-size': '0.85em'})
                                 for cls, prob in zip(severity_classes, pred_probs)
@@ -567,7 +567,7 @@ def register_callbacks(app):
                     title=f"Your Location - Predicted: {predicted_label.upper()}"
                 )
                 
-                map_info = f"🎯 Showing your specific location with predicted severity: {predicted_label.upper()}"
+                map_info = f"Showing your specific location with predicted severity: {predicted_label.upper()}"
                 
             else:
                 # Show multiple historical locations with matching criteria and predicted severity
@@ -589,9 +589,9 @@ def register_callbacks(app):
                     )
                     
                     if len(matching_locations) < total_matching_count:
-                        map_info = f"🗺️ Showing {len(matching_locations)} of {total_matching_count} historical {predicted_label} accidents that match your criteria"
+                        map_info = f"Showing {len(matching_locations)} of {total_matching_count} historical {predicted_label} accidents that match your criteria"
                     else:
-                        map_info = f"🗺️ Showing all {total_matching_count} historical {predicted_label} accidents that match your criteria"
+                        map_info = f"Showing all {total_matching_count} historical {predicted_label} accidents that match your criteria"
                     
                 else:
                     # Fallback to default location if no matching data found
@@ -607,7 +607,7 @@ def register_callbacks(app):
                         title="No Historical Matching Locations Found"
                     )
                     
-                    map_info = "⚠️ No historical accidents found matching your criteria and predicted severity"
+                    map_info = "No historical accidents found matching your criteria and predicted severity"
             
             map_fig.update_layout(
                 mapbox_style="open-street-map", 
@@ -616,15 +616,15 @@ def register_callbacks(app):
             
             # Create context information display
             context_display = dbc.Card([
-                dbc.CardHeader(html.H6("🧠 Analysis Context", className="mb-0")),
+                dbc.CardHeader(html.H6("Analysis Context", className="mb-0")),
                 dbc.CardBody([
                     html.P([
-                        f"📈 Found ", html.Strong(f"{actual_similar_count:,}"), f" {predicted_label} accidents matching your criteria"
+                        f"Found ", html.Strong(f"{actual_similar_count:,}"), f" {predicted_label} accidents matching your criteria"
                     ], className="mb-2"),
                     html.P([
-                        "🎯 Context Quality: ", html.Strong(context_quality)
+                        "Context Quality: ", html.Strong(context_quality)
                     ], className="mb-2"),
-                    html.P(f"🔧 Applied Constraints: {', '.join(context_info)}", className="mb-2"),
+                    html.P(f"Applied Constraints: {', '.join(context_info)}", className="mb-2"),
                     html.Hr(),
                     html.P(map_info, style={'color': 'blue', 'font-weight': 'bold', 'font-size': '0.9em'}, className="mb-0"),
                 ])
@@ -644,11 +644,11 @@ def register_callbacks(app):
             return bar_fig, map_fig, results, context_display
             
         except Exception as e:
-            print(f"❌ Prediction error: {e}")
+            print(f"Prediction error: {e}")
             import traceback
             traceback.print_exc()
             
-            error_fig = px.bar(title=f"❌ Error: {str(e)}")
+            error_fig = px.bar(title=f"Error: {str(e)}")
             error_map = px.scatter_mapbox(
                 pd.DataFrame({'lat': [0], 'lon': [0]}),
                 lat='lat', lon='lon', zoom=1, height=400
