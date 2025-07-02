@@ -612,29 +612,20 @@
         document.head.appendChild(style);
 
         // Mobile menu functionality
-        const mobileMenu = document.querySelector('.mobile-menu');
-        const navMenu = document.querySelector('.nav-menu');
+       const mobileMenu = document.querySelector('.mobile-menu');
+const navMenu = document.querySelector('.nav-menu');
 
-        mobileMenu.addEventListener('click', () => {
-            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
-            navMenu.style.position = 'absolute';
-            navMenu.style.top = '100%';
-            navMenu.style.left = '0';
-            navMenu.style.right = '0';
-            navMenu.style.background = 'rgba(10, 10, 10, 0.98)';
-            navMenu.style.flexDirection = 'column';
-            navMenu.style.padding = '20px';
-            navMenu.style.borderRadius = '0 0 20px 20px';
-        });
+mobileMenu.addEventListener('click', () => {
+  navMenu.classList.toggle('show-menu'); // toggle class instead of inline style
+});
 
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.nav-container')) {
-                if (window.innerWidth <= 768) {
-                    navMenu.style.display = 'none';
-                }
-            }
-        });
+// Close menu when clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.nav-container')) {
+    navMenu.classList.remove('show-menu');
+  }
+});
+
 
         // Add loading animation
         window.addEventListener('load', () => {
