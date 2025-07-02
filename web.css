@@ -408,6 +408,15 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
+        form {
+            background: var(--dark-secondary);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 60px auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
         .form-group {
             margin-bottom: 25px;
         }
@@ -545,3 +554,129 @@
             max-width: 600px;
             margin: 0 auto;
         }
+
+
+/* Contact info cards */
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* space-y-8 */
+}
+
+.contact-card {
+  background-color: #1f2937; /* bg-gray-800 */
+  padding: 1.5rem; /* p-6 */
+  border-radius: 0.75rem; /* rounded-xl */
+  border: 1px solid #374151; /* border-gray-700 */
+}
+
+.contact-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* space-x-4 */
+  margin-bottom: 1rem; /* mb-4 */
+}
+
+.contact-card-icon {
+  width: 1.5rem; /* w-6 */
+  height: 1.5rem; /* h-6 */
+  color: #fbbf24; /* text-yellow-400 */
+}
+
+.contact-card-title {
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 700; /* font-bold */
+  color: white;
+}
+
+.contact-card-text {
+  color: #d1d5db; /* text-gray-300 */
+}
+
+/* Project info card */
+.project-info-card {
+  background: linear-gradient(to right, rgba(251, 191, 36, 0.1), transparent); /* bg-gradient-to-r from-yellow-500/10 to-transparent */
+  padding: 1.5rem; /* p-6 */
+  border-radius: 0.75rem; /* rounded-xl */
+  border: 1px solid rgba(251, 191, 36, 0.3); /* border-yellow-500/30 */
+}
+
+.project-info-title {
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 700; /* font-bold */
+  color: white;
+  margin-bottom: 1rem; /* mb-4 */
+}
+
+.project-info-text {
+  color: #d1d5db; /* text-gray-300 */
+  line-height: 1.625; /* leading-relaxed */
+}
+
+
+/* Main footer container */
+.footer {
+  background-color: #1f2937; /* bg-gray-800 */
+  border-top: 1px solid #374151; /* border-t border-gray-700 */
+  padding: 2rem 0; /* py-8 */
+}
+
+/* Footer content wrapper */
+.footer-content {
+  max-width: 80rem; /* max-w-7xl */
+  margin: 0 auto;
+  padding: 0 1rem; /* px-4 */
+}
+
+@media (min-width: 640px) {
+  .footer-content {
+    padding: 0 1.5rem; /* sm:px-6 */
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-content {
+    padding: 0 2rem; /* lg:px-8 */
+  }
+}
+
+/* Footer center alignment */
+.footer-center {
+  text-align: center;
+}
+
+/* Footer logo and brand section */
+.footer-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem; /* space-x-3 */
+  margin-bottom: 1rem; /* mb-4 */
+}
+
+/* Footer logo */
+.footer-logo {
+  width: 1rem; /* w-8 */
+  height: 1rem; /* h-8 */ /* bg-gradient-to-r from-yellow-400 to-yellow-600 */
+  border-radius: 0.5rem; /* rounded-lg */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-logo-icon {
+  width: 2rem; /* w-5 */
+  height: 2rem; /* h-5 */
+}
+
+/* Footer brand text */
+.footer-brand-text {
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 700; /* font-bold */
+  color: white;
+}
+
+/* Footer copyright text */
+.footer-copyright {
+  color: #9ca3af; /* text-gray-400 */
+}
