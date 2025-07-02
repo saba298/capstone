@@ -1,6 +1,5 @@
 
 from utils.chatbot_utils import create_gemini_assistant, process_chatbot_query
-
 import dash
 from dash import callback, Input, Output, State, html, dcc, callback_context, clientside_callback
 import dash_bootstrap_components as dbc
@@ -99,13 +98,22 @@ EXAMPLE_QUERIES = {
 
 def create_message_bubble(sender, message, color, user=False):
     formatted_message = format_message_content(message)
-    bubble_class = "ms-5" if user else "me-5"
+    
+    if user:
+        bubble_class = "user-message"
+    elif color == "danger":
+        bubble_class = "error-message"
+    elif color == "info":
+        bubble_class = "info-message"
+    else:
+        bubble_class = "ai-message"
+    
     return dbc.Alert([
         html.Div([
             html.Strong(f"{sender}: "),
             formatted_message
         ])
-    ], color=color, className=f"mb-2 {bubble_class}")
+    ], color=color, className=f"mb-2 {bubble_class} fade-in-up")
 
 def format_message_content(message):
     if not isinstance(message, str):
@@ -160,8 +168,8 @@ def create_layout():
             dbc.Alert([
                 html.H4("⚠️ Data Loading Issue", className="alert-heading"),
                 html.P("Unable to load the traffic accident dataset. Please check the file path and try again."),
-            ], color="warning")
-        ])
+            ], color="warning", className="status-alert")
+        ], className="main-container")
     
     chatbot_status = "🤖 Gemini AI" if (GEMINI_CHATBOT_AVAILABLE and assistant.gemini_available) else (
         "🔄 Hybrid Mode" if GEMINI_CHATBOT_AVAILABLE else (
@@ -173,10 +181,11 @@ def create_layout():
         dbc.Row([
             dbc.Col([
                 html.Div([
-                    html.H1("🤖 SafeRoad AI Assistant", className="text-center mb-2"),
+                    html.H1("SafeRoad AI Assistant", className="app-title"),
                     html.P("Powered by Gemini AI • Dubai Traffic Accident Analysis", 
-                           className="text-center text-muted mb-4"),
-                ]),
+                           className="app-subtitle"),
+                ], className="app-header"),
+                
                 dbc.Alert([
                     html.Div([
                         html.Strong(f"{chatbot_status}: "),
@@ -188,7 +197,7 @@ def create_layout():
                         f"{len(df):,} traffic accidents • ",
                         f"{df['acci_date'].min().strftime('%Y')} - {df['acci_date'].max().strftime('%Y')}"
                     ])
-                ], color="info", className="mb-4"),
+                ], color="info", className="status-alert mb-4"),
                 
                 dbc.Card([
                     dbc.CardHeader([
@@ -197,7 +206,7 @@ def create_layout():
                             dbc.ButtonGroup([
                                 dbc.Button("🗑️ Clear", id="clear-chat-button", color="outline-secondary", size="sm"),
                                 dbc.Button("💡 Tips", id="tips-button", color="outline-info", size="sm"),
-                            ], className="float-end")
+                            ], className="float-end header-btn-group")
                         ])
                     ]),
                     dbc.CardBody([
@@ -212,50 +221,45 @@ def create_layout():
                                     html.Small("Try asking detailed questions - I can understand context and provide comprehensive analysis!", 
                                              className="text-muted")
                                 ])
-                            ], color="info", className="mb-2")
-                        ], style={
-                            'height': '450px', 
-                            'overflowY': 'auto', 
-                            'padding': '15px', 
-                            'backgroundColor': '#f8f9fa', 
-                            'borderRadius': '10px',
-                            'border': '1px solid #dee2e6'
-                        }),
+                            ], color="info", className="info-message")
+                        ], className="chat-messages-container"),
+                        
                         html.Hr(),
+                        
                         dbc.InputGroup([
                             dbc.Input(
                                 id='chat-input-enhanced',
                                 type='text',
                                 placeholder='Ask anything about traffic accidents... (e.g., "Why do more accidents happen in March?")',
-                                className="form-control",
-                                debounce=True,
-                                style={'fontSize': '14px'}
+                                className="chat-input",
+                                debounce=True
                             ),
                             dbc.Button(
                                 [html.I(className="fas fa-paper-plane me-1"), "Send"], 
                                 id='chat-send-enhanced', 
-                                color='primary'
+                                className="chat-send-btn pulse-animation"
                             )
-                        ], className="mb-3"),
+                        ], className="chat-input-group mb-3"),
+                        
                         html.Div([
                             html.H6("💡 Try these intelligent queries:", className="mb-3"),
                             dbc.Row([
                                 dbc.Col([
-                                    dbc.Button("Severe accidents patterns", id="example-1", size="sm", outline=True, color="danger", className="mb-2 w-100"),
-                                    dbc.Button("Weather safety analysis", id="example-2", size="sm", outline=True, color="info", className="mb-2 w-100"),
-                                    dbc.Button("Seasonal comparisons", id="example-3", size="sm", outline=True, color="success", className="mb-2 w-100"),
-                                    dbc.Button("Peak hours insights", id="example-4", size="sm", outline=True, color="warning", className="mb-2 w-100"),
+                                    dbc.Button("Severe accidents patterns", id="example-1", className="example-btn mb-2 w-100"),
+                                    dbc.Button("Weather safety analysis", id="example-2", className="example-btn mb-2 w-100"),
+                                    dbc.Button("Seasonal comparisons", id="example-3", className="example-btn mb-2 w-100"),
+                                    dbc.Button("Peak hours insights", id="example-4", className="example-btn mb-2 w-100"),
                                 ], md=6),
                                 dbc.Col([
-                                    dbc.Button("Weekend vs weekday trends", id="example-5", size="sm", outline=True, color="primary", className="mb-2 w-100"),
-                                    dbc.Button("Weather impact report", id="example-6", size="sm", outline=True, color="secondary", className="mb-2 w-100"),
-                                    dbc.Button("Zone safety assessment", id="example-7", size="sm", outline=True, color="dark", className="mb-2 w-100"),
-                                    dbc.Button("Time-based safety tips", id="example-8", size="sm", outline=True, color="light", className="mb-2 w-100"),
+                                    dbc.Button("Weekend vs weekday trends", id="example-5", className="example-btn mb-2 w-100"),
+                                    dbc.Button("Weather impact report", id="example-6", className="example-btn mb-2 w-100"),
+                                    dbc.Button("Zone safety assessment", id="example-7", className="example-btn mb-2 w-100"),
+                                    dbc.Button("Time-based safety tips", id="example-8", className="example-btn mb-2 w-100"),
                                 ], md=6)
                             ])
-                        ])
+                        ], className="example-queries-section")
                     ])
-                ], className="mb-4"),
+                ], className="chat-card mb-4"),
                 
                 dbc.Modal([
                     dbc.ModalHeader("💡 AI Assistant Tips"),
@@ -286,10 +290,14 @@ def create_layout():
                 ], id="tips-modal", size="lg"),
             ], width=12)
         ])
-    ], fluid=True, className="py-4")
+    ], fluid=True, className="main-container fade-in-up")
 
-# Instantiate Dash app
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SLATE])
+# Instantiate Dash app with external stylesheets including your CSS file
+app = dash.Dash(__name__, external_stylesheets=[
+    dbc.themes.BOOTSTRAP,
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
+    '/assets/chatbot_styles.css'  # Your custom CSS file
+])
 app.title = "SafeRoad AI Chatbot"
 app.layout = create_layout()
 
@@ -327,7 +335,7 @@ def handle_chat_interaction(*args):
                     html.Br(),
                     html.Small("What would you like to know about Dubai traffic safety?", className="text-muted")
                 ])
-            ], color="info", className="mb-2")
+            ], color="info", className="info-message fade-in-up")
         ]
         return initial_message, ""
 
@@ -362,7 +370,7 @@ app.clientside_callback(
         if (messages && messages.length > 0) {
             setTimeout(function() {
                 try {
-                    const chatContainer = document.getElementById('chat-messages-enhanced');
+                    const chatContainer = document.querySelector('.chat-messages-container');
                     if (chatContainer) {
                         chatContainer.scrollTop = chatContainer.scrollHeight;
                     }
@@ -380,5 +388,3 @@ app.clientside_callback(
 
 if __name__ == "__main__":
     app.run(debug=True, port=8051)
-
-
