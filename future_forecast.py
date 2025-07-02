@@ -22,7 +22,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.join(current_dir, '..', '..', 'notebooks', 'xgb_model.json')
 model = Booster()
 model.load_model(model_path)
-print(f"✅ Future Forecast: Model loaded from: {model_path}")
+print(f" Future Forecast: Model loaded from: {model_path}")
 
 # === Load encoders ===
 # From dashboard/layout/ to notebooks/
@@ -32,7 +32,7 @@ le_condition = joblib.load(os.path.join(encoder_dir, 'label_encoder_condition.pk
 le_day_of_week = joblib.load(os.path.join(encoder_dir, 'label_encoder_day_of_week.pkl'))
 le_season = joblib.load(os.path.join(encoder_dir, 'label_encoder_season.pkl'))
 le_part_of_day = joblib.load(os.path.join(encoder_dir, 'label_encoder_part_of_day.pkl'))
-print(f"✅ Future Forecast: Encoders loaded from: {encoder_dir}")
+print(f" Future Forecast: Encoders loaded from: {encoder_dir}")
 
 # === Load training data for context-aware defaults ===
 try:
@@ -44,18 +44,18 @@ try:
     columns_with_nulls = ["temp_c", "humidity", "wind_kph", "precip_mm", "cloud", "pressure_mb", "condition"]
     TRAINING_DATA = TRAINING_DATA.dropna(subset=columns_with_nulls)
     
-    print("✅ Future Forecast: Loaded training data for context-aware defaults")
-    print(f"📊 Training data shape: {TRAINING_DATA.shape}")
-    print(f"📁 Data loaded from: {training_data_path}")
+    print(" Future Forecast: Loaded training data for context-aware defaults")
+    print(f" Training data shape: {TRAINING_DATA.shape}")
+    print(f" Data loaded from: {training_data_path}")
     
 except Exception as e:
-    print(f"❌ Future Forecast: Could not load training data: {e}")
-    print(f"🔍 Tried to load from: {training_data_path}")
-    print(f"🔍 Current directory: {current_dir}")
-    print(f"🔍 Check if file exists: {os.path.exists(training_data_path) if 'training_data_path' in locals() else 'Path not defined'}")
+    print(f" Future Forecast: Could not load training data: {e}")
+    print(f" Tried to load from: {training_data_path}")
+    print(f" Current directory: {current_dir}")
+    print(f" Check if file exists: {os.path.exists(training_data_path) if 'training_data_path' in locals() else 'Path not defined'}")
     TRAINING_DATA = None
 
-# === Feature definitions - CORRECTED ORDER TO MATCH MODEL ===
+# === Feature definitions ===
 NUMERICAL_FEATURES = ['acci_x', 'acci_y', 'acci_hour', 'temp_c', 'humidity', 'wind_kph', 'precip_mm', 'cloud', 'pressure_mb']
 CATEGORICAL_FEATURES = ['condition', 'day_of_week', 'season', 'part_of_day']  # Fixed order
 ALL_FEATURES = NUMERICAL_FEATURES + CATEGORICAL_FEATURES
@@ -73,7 +73,7 @@ def map_weather_condition(weather_api_condition):
     # Get available conditions from the encoder
     available_conditions = le_condition.classes_
     
-    # Map based on common weather conditions - adjust based on your model's categories
+    # Map based on common weather conditions
     if any(word in condition_lower for word in ['clear', 'sunny']):
         return 'Clear' if 'Clear' in available_conditions else available_conditions[0]
     elif any(word in condition_lower for word in ['cloud', 'overcast']):
@@ -87,7 +87,7 @@ def map_weather_condition(weather_api_condition):
     elif any(word in condition_lower for word in ['thunder', 'storm']):
         return 'Thunderstorm' if 'Thunderstorm' in available_conditions else available_conditions[0]
     else:
-        # Default to first available condition (usually most common)
+        # Default to first available condition
         return available_conditions[0]
 
 def get_season_from_date(date_str):
@@ -141,7 +141,7 @@ def get_context_aware_defaults(user_input, forecast_data, training_data):
         }
         return fallback_defaults, 0, ["No training data available"]
     
-    # Combine forecast data with user input (user input takes priority)
+    # Combine forecast data with user input
     combined_input = forecast_data.copy()
     combined_input.update(user_input)
     
@@ -172,7 +172,7 @@ def get_context_aware_defaults(user_input, forecast_data, training_data):
             previous_size = len(current_data)
             
             if constraint_type == 'categorical':
-                # Apply categorical constraint (exact match)
+                # Apply categorical constraint
                 temp_data = current_data[current_data[feature] == combined_input[feature]]
                 constraint_desc = f"{feature}={combined_input[feature]}"
                 
@@ -199,11 +199,11 @@ def get_context_aware_defaults(user_input, forecast_data, training_data):
             if len(temp_data) >= 1:
                 current_data = temp_data
                 applied_constraints.append(constraint_desc)
-                print(f"✅ Applied {constraint_desc}: {previous_size} → {len(current_data)} samples")
+                print(f"Applied {constraint_desc}: {previous_size} → {len(current_data)} samples")
             else:
-                print(f"⚠️ Skipped {constraint_desc}: would result in 0 samples")
+                print(f"Skipped {constraint_desc}: would result in 0 samples")
     
-    print(f"🎯 Final context: {len(current_data)} samples with constraints: {applied_constraints}")
+    print(f"Final context: {len(current_data)} samples with constraints: {applied_constraints}")
     
     # Generate defaults from the filtered data
     defaults = {}
@@ -257,7 +257,7 @@ def prepare_model_input(complete_input):
         input_df['season'] = le_season.transform([complete_input['season']])[0]
         input_df['part_of_day'] = le_part_of_day.transform([complete_input['part_of_day']])[0]
     except ValueError as e:
-        print(f"❌ Encoding error: {e}")
+        print(f"Encoding error: {e}")
         print(f"Available conditions: {le_condition.classes_}")
         print(f"Available days: {le_day_of_week.classes_}")
         print(f"Available seasons: {le_season.classes_}")
@@ -274,9 +274,9 @@ def prepare_model_input(complete_input):
     
     input_df = input_df[expected_order]
     
-    print(f"🔧 Model input shape: {input_df.shape}")
-    print(f"🔧 Model input columns: {list(input_df.columns)}")
-    print(f"🔧 Model input dtypes: {input_df.dtypes.to_dict()}")
+    print(f"Model input shape: {input_df.shape}")
+    print(f"Model input columns: {list(input_df.columns)}")
+    print(f"Model input dtypes: {input_df.dtypes.to_dict()}")
     
     return input_df
 
@@ -286,7 +286,7 @@ def get_weather_forecast(city, date, hour):
     """
     if WEATHERAPI_KEY == "your_weatherapi_key_here" or WEATHERAPI_KEY == "cb8abdc4079f47ce878135604252103":
         # Mock forecast data for demo purposes
-        print("🔧 Using mock weather data (API key not configured)")
+        print("Using mock weather data (API key not configured)")
         return {
             'temp_c': 28.5,
             'humidity': 65,
@@ -306,25 +306,25 @@ def get_weather_forecast(city, date, hour):
         days_ahead = (target_date - datetime.now()).days
         
         if days_ahead > 14:
-            print(f"⚠️ Date too far ahead ({days_ahead} days), using historical average")
+            print(f"Date too far ahead ({days_ahead} days), using historical average")
             return None
         
         # Call WeatherAPI.com forecast endpoint
         url = f"http://api.weatherapi.com/v1/forecast.json?key={WEATHERAPI_KEY}&q={city}&dt={date}&aqi=no&alerts=no"
         response = requests.get(url, timeout=10)
         
-        print(f"🌐 WeatherAPI request: {url}")
-        print(f"🌐 Response status: {response.status_code}")
+        print(f"WeatherAPI request: {url}")
+        print(f"Response status: {response.status_code}")
         
         if response.status_code != 200:
-            print(f"❌ Weather API error: {response.status_code} - {response.text}")
+            print(f"Weather API error: {response.status_code} - {response.text}")
             return None
         
         data = response.json()
         
         # Validate response structure
         if 'forecast' not in data or 'forecastday' not in data['forecast']:
-            print(f"❌ Invalid response structure: {data}")
+            print(f"Invalid response structure: {data}")
             return None
         
         # Find forecast for chosen hour
@@ -332,10 +332,10 @@ def get_weather_forecast(city, date, hour):
         forecast_for_hour = next((h for h in forecast_hours if h['time'].endswith(f"{hour:02d}:00")), None)
         
         if not forecast_for_hour:
-            print(f"❌ No forecast data for hour {hour}")
+            print(f"No forecast data for hour {hour}")
             # Use the closest available hour
             forecast_for_hour = forecast_hours[min(hour, len(forecast_hours)-1)]
-            print(f"🔧 Using closest hour: {forecast_for_hour['time']}")
+            print(f"Using closest hour: {forecast_for_hour['time']}")
         
         # Extract relevant features
         weather_data = {
@@ -351,17 +351,17 @@ def get_weather_forecast(city, date, hour):
             'location_name': data['location']['name']
         }
         
-        print(f"✅ Weather data retrieved: {weather_data}")
+        print(f"Weather data retrieved: {weather_data}")
         return weather_data
         
     except requests.exceptions.Timeout:
-        print("❌ Weather API timeout")
+        print("Weather API timeout")
         return None
     except requests.exceptions.RequestException as e:
-        print(f"❌ Weather API request error: {e}")
+        print(f"Weather API request error: {e}")
         return None
     except Exception as e:
-        print(f"❌ Error fetching weather data: {e}")
+        print(f"Error fetching weather data: {e}")
         return None
 
 def get_layout():
@@ -502,7 +502,8 @@ def get_layout():
             ], width=10),
         ], className="mb-4"),
 
-    ], fluid=True, className="p-4")
+    ], fluid=True, className="p-4 future-tab-container")
+
 def register_callbacks(app):
     """
     Register callbacks for the future forecast tab
@@ -534,18 +535,18 @@ def register_callbacks(app):
             # Validate inputs
             if not city or not date or hour is None:
                 error_msg = dbc.Alert("Please enter city, date, and time.", color="warning")
-                empty_fig = px.bar(title="❌ Missing required inputs")
+                empty_fig = px.bar(title="Missing required inputs")
                 empty_map = px.scatter_mapbox(pd.DataFrame({'lat': [0], 'lon': [0]}), lat='lat', lon='lon', zoom=1, height=400)
                 empty_map.update_layout(mapbox_style="open-street-map")
                 return empty_fig, empty_map, error_msg, html.Div()
 
-            print(f"🌤️ Fetching forecast for {city} on {date} at {hour}:00")
+            print(f"Fetching forecast for {city} on {date} at {hour}:00")
             
             # Get weather forecast
             weather_data = get_weather_forecast(city, date, hour)
             if not weather_data:
                 error_msg = dbc.Alert("Failed to fetch weather forecast. Please check city name and date (max 14 days ahead).", color="danger")
-                empty_fig = px.bar(title="❌ Weather API Error")
+                empty_fig = px.bar(title="Weather API Error")
                 empty_map = px.scatter_mapbox(pd.DataFrame({'lat': [0], 'lon': [0]}), lat='lat', lon='lon', zoom=1, height=400)
                 empty_map.update_layout(mapbox_style="open-street-map")
                 return empty_fig, empty_map, error_msg, html.Div()
@@ -563,7 +564,7 @@ def register_callbacks(app):
             if condition_override:
                 user_overrides['condition'] = condition_override
 
-            print(f"🎛️ User overrides: {user_overrides}")
+            print(f"User overrides: {user_overrides}")
 
             # Create forecast data with time context
             forecast_data = {
@@ -582,12 +583,12 @@ def register_callbacks(app):
                 'part_of_day': get_part_of_day_from_hour(hour)
             }
             
-            print(f"🌤️ Forecast data: {forecast_data}")
+            print(f"Forecast data: {forecast_data}")
 
             # Get context-aware defaults using progressive filtering
             defaults, n_similar, context_info = get_context_aware_defaults(user_overrides, forecast_data, TRAINING_DATA)
             
-            print(f"⚙️ Final defaults: {defaults}")
+            print(f"Final defaults: {defaults}")
 
             # Prepare model input
             model_input_df = prepare_model_input(defaults)
@@ -599,7 +600,7 @@ def register_callbacks(app):
             predicted_label = severity_classes[predicted_class]
             confidence = pred_probs[predicted_class]
             
-            print(f"✅ Prediction: {predicted_label} (confidence: {confidence:.3f})")
+            print(f"Prediction: {predicted_label} (confidence: {confidence:.3f})")
 
             # FIXED: Determine data sources for display and create final display values
             forecast_used = []
@@ -630,29 +631,29 @@ def register_callbacks(app):
             # FIXED: Use actual final location for display
             final_location_name = weather_data.get('location_name', city)
             if ('acci_x' in user_overrides and user_overrides['acci_x'] is not None) or ('acci_y' in user_overrides and user_overrides['acci_y'] is not None):
-    # User overrode location - only show the single prediction point
+                # User overrode location - only show the single prediction point
                 final_location_name = f"Custom Location ({final_location['lat']:.4f}, {final_location['lon']:.4f})"
 
-            # Create results display with CORRECTED weather info
+            # Create results display with weather info
             results = dbc.Card([
-                dbc.CardHeader(html.H4("🎯 Future Forecast Prediction Results")),
+                dbc.CardHeader(html.H4("Future Forecast Prediction Results")),
                 dbc.CardBody([
                     html.H2(f"{predicted_label.upper()}", 
                         style={'color': severity_color_map[predicted_label], 'text-align': 'center'}),
                     html.P(f"Confidence: {confidence:.1%}", style={'text-align': 'center', 'font-size': '1.2em'}),
                     html.Hr(),
                     html.P([
-                        "📅 ", html.Strong(f"{date} at {hour:02d}:00"), " in ", 
+                        "Date: ", html.Strong(f"{date} at {hour:02d}:00"), " in ", 
                         html.Strong(final_location_name)
                     ]),
                     html.P([
-                        "🌍 Coordinates: ", 
+                        " Coordinates: ", 
                         html.Strong(f"({final_location['lat']:.4f}, {final_location['lon']:.4f})")
                     ]),
                     html.Hr(),
                     
-                    # Weather information display (FIXED to show actual used values)
-                    html.H5("🌤️ Weather Conditions Used for Prediction:"),
+                    # Weather information display
+                    html.H5(" Weather Conditions Used for Prediction:"),
                     dbc.Row([
                         dbc.Col([
                             html.P([html.Strong("Temperature: "), f"{display_weather_data.get('temp_c', 'N/A')}°C"]),
@@ -669,7 +670,7 @@ def register_callbacks(app):
                     
                     # Data source information
                     html.Hr(),
-                    html.H6("📊 Data Sources:"),
+                    html.H6("Data Sources:"),
                     html.Ul([
                         html.Li([html.Strong("From Weather API: "), ", ".join(forecast_used) if forecast_used else "None"]),
                         html.Li([html.Strong("User Overridden: "), ", ".join(user_overridden) if user_overridden else "None"]),
@@ -680,7 +681,7 @@ def register_callbacks(app):
 
             # Create context information display
             context_info_display = dbc.Card([
-                dbc.CardHeader(html.H5("🧠 Progressive Context Analysis")),
+                dbc.CardHeader(html.H5("Progressive Context Analysis")),
                 dbc.CardBody([
                     html.P([
                         html.Strong(f"Similar Historical Cases: "), f"{n_similar:,} records found"
@@ -705,7 +706,7 @@ def register_callbacks(app):
                 prob_df, x='Severity', y='Probability',
                 color='Severity',
                 color_discrete_map=severity_color_map,
-                title=f"🎯 Accident Severity Prediction for {final_location_name}",
+                title=f"Accident Severity Prediction for {final_location_name}",
                 labels={'Probability': 'Prediction Probability'},
                 text='Probability'
             )
@@ -716,13 +717,13 @@ def register_callbacks(app):
                 height=400
             )
 
-            # FIXED: Create map with correct location (use final_location instead of weather_data)
+            # FIXED: Create map with correct location
             # Create map with prediction location and similar historical locations
             map_data = []
 
-            # Add the prediction location (main point)
+            # Add the prediction location
             if 'acci_x' in user_overrides or 'acci_y' in user_overrides:
-                # User overrode location - only show the single prediction point
+                # User overrode location
                 map_data.append({
                     'lat': final_location['lat'],
                     'lon': final_location['lon'],
@@ -732,7 +733,7 @@ def register_callbacks(app):
                     'type': 'Prediction Location',
                     'size': 15
                 })
-                map_title = f"📍 Custom Prediction Location: {final_location_name}"
+                map_title = f"Custom Prediction Location: {final_location_name}"
             else:
                 # Location not overridden - show prediction + similar historical locations
                 map_data.append({
@@ -761,9 +762,9 @@ def register_callbacks(app):
                             'type': 'Historical Location',
                             'size': 8
                         })
-                    map_title = f"📍 {final_location_name} + {len(similar_locations)} Similar {predicted_label.title()} Locations"
+                    map_title = f"{final_location_name} + {len(similar_locations)} Similar {predicted_label.title()} Locations"
                 else:
-                    map_title = f"📍 Prediction Location: {final_location_name}"
+                    map_title = f"Prediction Location: {final_location_name}"
 
             map_df = pd.DataFrame(map_data)
 
@@ -805,9 +806,9 @@ def register_callbacks(app):
 
         except Exception as e:
             # Handle any errors that occur during processing
-            print(f"❌ Error in forecast processing: {str(e)}")
+            print(f"Error in forecast processing: {str(e)}")
             error_msg = dbc.Alert(f"An error occurred: {str(e)}", color="danger")
-            empty_fig = px.bar(title="❌ Processing Error")
+            empty_fig = px.bar(title="Processing Error")
             empty_map = px.scatter_mapbox(pd.DataFrame({'lat': [0], 'lon': [0]}), lat='lat', lon='lon', zoom=1, height=400)
             empty_map.update_layout(mapbox_style="open-street-map")
             return empty_fig, empty_map, error_msg, html.Div()
@@ -856,7 +857,7 @@ def get_similar_locations_with_severity(complete_input, predicted_severity, trai
         if len(severity_data) == 0:
             return pd.DataFrame()
         
-        # Apply user constraints to find similar accidents (same logic as context-aware defaults)
+        # Apply user constraints to find similar accidents
         constraint_priority = [
             ('condition', 'categorical'),
             ('season', 'categorical'), 
@@ -878,7 +879,7 @@ def get_similar_locations_with_severity(complete_input, predicted_severity, trai
         for feature, constraint_type in constraint_priority:
             if feature in complete_input and complete_input[feature] is not None:
                 if constraint_type == 'categorical':
-                    # Apply categorical constraint (exact match)
+                    # Apply categorical constraint
                     temp_data = filtered_data[filtered_data[feature] == complete_input[feature]]
                     
                 else:  # numerical
@@ -912,7 +913,7 @@ def get_similar_locations_with_severity(complete_input, predicted_severity, trai
         if len(filtered_data) == 0:
             return pd.DataFrame()
         
-        # Sample locations if we have too many (for performance)
+        # Sample locations if we have too many
         if len(filtered_data) > max_locations:
             filtered_data = filtered_data.sample(n=max_locations, random_state=42)
         
@@ -920,14 +921,14 @@ def get_similar_locations_with_severity(complete_input, predicted_severity, trai
         result_df = filtered_data[['acci_x', 'acci_y', 'severity']].copy()
         result_df['similarity_score'] = 1.0  # All are considered similar since they passed filters
         
-        # Remove duplicate locations (within 0.01 degree tolerance) efficiently
+        # Remove duplicate locations
         result_df = result_df.round({'acci_x': 2, 'acci_y': 2}).drop_duplicates(subset=['acci_x', 'acci_y'])
         
-        print(f"✅ Found {len(result_df)} similar locations with {predicted_severity} severity")
+        print(f"Found {len(result_df)} similar locations with {predicted_severity} severity")
         return result_df.head(max_locations)
         
     except Exception as e:
-        print(f"❌ Error finding similar locations: {e}")
+        print(f"Error finding similar locations: {e}")
         return pd.DataFrame()
 
 
@@ -1017,12 +1018,11 @@ def update_prediction_logic():
     # Use final_input_data instead of defaults for model prediction
     model_input_df = prepare_model_input(final_input_data)
     
-    # Continue with prediction as before...
 
-print("✅ Future forecast code continuation and fixes applied!")
-print("🔧 Key fixes implemented:")
-print("   - Fixed location display to use actual coordinates (user override or API)")
-print("   - Fixed weather data display to show actual values used in prediction")
-print("   - Fixed map to show correct location")
-print("   - Improved data priority logic: user_overrides > forecast_data > context_defaults")
-print("   - Added proper data source tracking for transparency")
+print("Future forecast code continuation and fixes applied!")
+print("Key fixes implemented:")
+print("- Fixed location display to use actual coordinates (user override or API)")
+print("- Fixed weather data display to show actual values used in prediction")
+print("- Fixed map to show correct location")
+print("- Improved data priority logic: user_overrides > forecast_data > context_defaults")
+print("- Added proper data source tracking for transparency")
