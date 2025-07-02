@@ -683,23 +683,3 @@
 
 
 
-/* Hide menu on mobile by default */
-@media (max-width: 768px) {
-  .nav-menu {
-    display: none;
-    flex-direction: column;
-    background: rgba(10, 10, 10, 0.98);
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    padding: 20px;
-    border-radius: 0 0 20px 20px;
-    z-index: 999;
-  }
-
-  /* Show when toggle class is added */
-  .nav-menu.show-menu {
-    display: flex;
-  }
-}
